@@ -1,5 +1,7 @@
 # GuardAPI - API Vulnerability Scanner Lite
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sahananaikar104-coder/GuardAP)
+
 GuardAPI is an enterprise-grade, lightweight, and zero-configuration API Security Scanner designed to audit REST endpoints against critical security weaknesses. It is particularly optimized for compliance checks inspired by the **OWASP API Security Top 10 (2023)**.
 
 Built with a high-performance **FastAPI** backend and a premium, responsive **Vanilla HTML5/CSS3/JS glassmorphism dashboard**, GuardAPI offers immediate security feedback with no database or build-system prerequisites.
