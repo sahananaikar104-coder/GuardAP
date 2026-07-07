@@ -12,7 +12,7 @@ from fastapi.responses import HTMLResponse
 
 app = FastAPI(
     title="API Vulnerability Scanner Lite",
-    description="A lightweight, zero-configuration API security scanner for OWASP API Top 10.",
+    description="A lightweight API security scanner for OWASP API Top 10.",
     version="1.0.0"
 )
 
@@ -1219,7 +1219,7 @@ async def serve_dashboard():
     </main>
 
     <footer>
-        GuardAPI - College Placement Eligibility Verification Demo - Local Host Instance
+        © 2026 GuardAPI • API Vulnerability Scanner • OWASP API Security Inspired
     </footer>
 
     <script>

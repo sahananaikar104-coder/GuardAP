@@ -1,96 +1,147 @@
-# GuardAPI - API Vulnerability Scanner Lite
+# GuardAPI: API Vulnerability Scanner
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sahananaikar104-coder/GuardAP)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110.0%2B-009688.svg)](https://fastapi.tiangolo.com/)
+[![Render Deployment](https://img.shields.io/badge/deployed-Render-brightgreen.svg)](https://guardap.onrender.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-GuardAPI is an enterprise-grade, lightweight, and zero-configuration API Security Scanner designed to audit REST endpoints against critical security weaknesses. It is particularly optimized for compliance checks inspired by the **OWASP API Security Top 10 (2023)**.
-
-Built with a high-performance **FastAPI** backend and a premium, responsive **Vanilla HTML5/CSS3/JS glassmorphism dashboard**, GuardAPI offers immediate security feedback with no database or build-system prerequisites.
-
----
-
-## 🚀 Key Features & OWASP API Top 10 Mapping
-
-GuardAPI scans and reports on major API security vulnerabilities:
-
-1. **HTTPS & Transport Encryption Audit**
-   - **OWASP Category**: *API5:2023 - Broken Function Level Authorization / Unencrypted Transport*
-   - **Check**: Verifies target protocol (HTTPS vs HTTP).
-   - **Impact**: Protects against credentials and authorization token exposure to Man-in-the-Middle (MITM) attacks.
-
-2. **Security Headers Compliance Audit**
-   - **OWASP Category**: *API8:2023 - Security Misconfiguration*
-   - **Check**: Checks the presence of `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Strict-Transport-Security`, and `Referrer-Policy`.
-   - **Impact**: Mitigates Cross-Site Scripting (XSS), Clickjacking, MIME-sniffing, and protocol downgrading.
-
-3. **Predictable Resource Identifiers (IDOR Check)**
-   - **OWASP Category**: *API1:2023 - Broken Object Level Authorization (IDOR)*
-   - **Check**: Scans URL paths and query strings for sequential numeric IDs (e.g. `/api/users/12` vs UUIDs).
-   - **Impact**: Prevents object iteration attacks where unauthorized users fetch resources by enumeration.
-
-4. **Passive SQL Injection (SQLi) Probing**
-   - **OWASP Category**: *API8:2023 - Security Misconfiguration / Injection*
-   - **Check**: Safe injection testing using harmless inputs (`'`, `"`) to detect raw query concatenation through database syntax errors in the server response.
-   - **Impact**: Flags vulnerabilities that could lead to unauthorized database access, leakage, or takeover.
-
-5. **Rate-limiting & Unrestricted Resource Consumption Check**
-   - **OWASP Category**: *API4:2023 - Unrestricted Resource Consumption*
-   - **Check**: Simulates rapid concurrent requests (5-8 requests) to verify if throttling (HTTP 429 Too Many Requests) is configured.
-   - **Impact**: Mitigates risk of Denial of Service (DoS) and API abuse.
+GuardAPI is a lightweight security auditing tool designed to check REST API endpoints against common security vulnerabilities. The project focuses on key risk areas highlighted in the **OWASP API Security Top 10 (2023)**, providing passive analysis and non-intrusive checks for compliance and configuration audits.
 
 ---
 
-## 🛠️ Technology Stack
-- **Backend**: FastAPI (Python 3.8+), Uvicorn, HTTPX
-- **Frontend**: Single-Page App (HTML5, Vanilla CSS with custom glassmorphism design tokens, Async JavaScript)
-- **Deployment-Ready**: Render, Railway, Heroku configs pre-integrated.
+## 1. Project Overview
+
+This project was built to explore automated vulnerability detection and REST API security compliance. GuardAPI parses endpoint patterns, inspects HTTP response headers, performs basic rate-limiting checks, and searches for leakage in database errors. It provides developers with a local dashboard to evaluate the security configuration of their API endpoints.
 
 ---
 
-## 💻 Local Setup & Installation
+## 2. Features
 
-### Windows (Quick Start)
-Simply double-click the `run.bat` file in the root directory. It will automate python virtual environment setup, install requirements, and run the server on:
-`http://localhost:8000`
+- **Transport Security Verification**: Confirms whether the target endpoint enforces HTTPS to prevent MitM exposure.
+- **Security Headers Audit**: Verifies the presence and values of key security headers:
+  - `Content-Security-Policy`
+  - `X-Frame-Options`
+  - `X-Content-Type-Options`
+  - `Strict-Transport-Security` (HSTS)
+  - `Referrer-Policy`
+- **Predictable Resource Identifier (IDOR) Analysis**: Analyzes paths and query strings for sequential numeric IDs (e.g., `/api/v1/users/12` vs UUIDs) that are vulnerable to enumeration.
+- **SQL Injection (SQLi) Error-Based Detection**: Safely injects control characters (`'`, `"`) into parameters to check if response bodies contain leakage or system error logs (SQLite, MySQL, PostgreSQL, Oracle).
+- **Resource Consumption / Rate-Limiting Check**: Sends a concurrent request burst (5-8 requests) in a short window to determine if the endpoint responds with `429 Too Many Requests`.
+- **Auditing Dashboard**: Interactive interface presenting real-time risk scores, vulnerability descriptions, OWASP categories, evidence logs, and remediation instructions.
 
-### Manual Setup (Multi-platform)
-1. Clone the repository and navigate to the directory:
+---
+
+## 3. Technology Stack
+
+- **Backend**: FastAPI, Uvicorn, HTTPX
+- **Frontend**: Single-page UI built with HTML5, CSS3 (using custom variables and modern layout), and Vanilla JavaScript
+- **DevOps/Deployment**: Render (YAML blueprint-ready), Railway (Procfile-ready)
+
+---
+
+## 4. Project Structure
+
+```text
+API-Vulnerability-Scanner-Lite/
+├── main.py              # FastAPI server, security scanner modules, and embedded HTML frontend
+├── requirements.txt     # Python application dependencies
+├── render.yaml          # Blueprint deployment specification for Render.com
+├── Procfile             # Process manager runner config for Heroku/Railway
+├── run.bat              # Script to automate local setup and launch on Windows
+└── README.md            # Project documentation and specifications
+```
+
+---
+
+## 5. Installation
+
+### Prerequisites
+- Python 3.8 or higher installed on your system.
+
+### Steps
+1. Clone the repository:
    ```bash
-   cd API-Vulnerability-Scanner-Lite
+   git clone https://github.com/sahananaikar104-coder/GuardAP.git
+   cd GuardAP
    ```
-2. Create and activate a Python virtual environment:
+
+2. Create a virtual environment:
    ```bash
    python -m venv .venv
-   # Windows:
-   .venv\Scripts\activate
-   # macOS/Linux:
-   source .venv/bin/activate
    ```
-3. Install dependencies:
+
+3. Activate the virtual environment:
+   - **Windows (Command Prompt)**:
+     ```cmd
+     .venv\Scripts\activate.bat
+     ```
+   - **macOS / Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+4. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-4. Run the FastAPI application:
-   ```bash
-   uvicorn main:app --host 127.0.0.1 --port 8000 --reload
-   ```
-5. Open your browser and go to `http://localhost:8000`.
 
 ---
 
-## 🌐 Public Cloud Deployment Guide
+## 6. Running Locally
 
-GuardAPI is built to be deployed on cloud platforms for remote verification.
+### Option A: Windows Quick Run
+Double-click the `run.bat` file in the root directory. It will automate the environment setup, install dependencies, and start the local server.
 
-### Option 1: Render.com (Fastest Free Option)
-Render detects `render.yaml` automatically and configures the environment.
-1. Push this folder to a GitHub repository.
-2. Sign in to [Render](https://render.com) and click **New +** -> **Blueprints**.
-3. Connect your GitHub repository.
-4. Render will auto-detect the configuration and deploy.
-*Alternatively, create a **Web Service**, set the runtime to **Python**, the Build Command to `pip install -r requirements.txt`, and the Start Command to `uvicorn main:app --host 0.0.0.0 --port $PORT`.*
+### Option B: Command Line Run
+From your activated terminal, start the server using Uvicorn:
+```bash
+uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+```
+Open your browser and navigate to `http://localhost:8000`.
 
-### Option 2: Railway.app / Heroku
-Railway uses the root `Procfile` automatically.
-1. Push this folder to GitHub.
-2. Sign in to [Railway](https://railway.app), click **New Project** -> **Deploy from GitHub repo**.
-3. Choose the repository and deploy.
+---
+
+## 7. Live Demo
+
+The application is deployed and available for live verification at:
+**[https://guardap.onrender.com](https://guardap.onrender.com)**
+
+---
+
+## 8. Example Scan
+
+Below is a sample JSON result returned by the backend scan API:
+
+```json
+{
+  "target_url": "https://httpbin.org/get",
+  "scan_time": "2026-07-07 15:49:13",
+  "response_time_seconds": 2.03,
+  "risk_score": 74,
+  "risk_level": "Medium",
+  "vulnerabilities": [
+    {
+      "name": "Missing Security Header: Content-Security-Policy",
+      "severity": "Medium",
+      "owasp": "API8:2023 - Security Misconfiguration",
+      "description": "Prevents Cross-Site Scripting (XSS) and injection attacks by restricting resources.",
+      "evidence": "Response headers lack 'Content-Security-Policy' key.",
+      "remediation": "Configure the web server or API routing framework to append 'Content-Security-Policy' with strict policies to responses."
+    }
+  ]
+}
+```
+
+---
+
+## 9. Future Improvements
+
+- **Authentication Flows**: Support for custom login flows, OAuth2, and multi-step scans (e.g. testing authenticated API paths).
+- **Expanded OWASP Mapping**: Implementation of passive checks for JWT configuration verification, CORS wildcard setups, and server version disclosures.
+- **Reporting Engine**: Dynamic PDF generation containing remediation checklists and executive summaries.
+
+---
+
+## 10. License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
